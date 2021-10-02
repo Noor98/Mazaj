@@ -25,7 +25,7 @@ class OrderRequest extends FormRequest
     {
         return [
             //'user_id'    => 'required',
-            'order_date' => 'required',
+            //'order_date' => 'required',
             'item_id_arr'=> 'required',
             'qty_arr'=> 'required',
             'desc_arr'=> 'required',

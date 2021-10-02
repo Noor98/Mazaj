@@ -82,7 +82,7 @@ class OrderController extends Controller
     {
         $order = Order::create([
             'user_id' => auth()->user()->id ,
-            'order_date' => $request->order_date,
+            'order_date' => date('Y-m-d'),
             'order_status' => 0,
             'description' => $request->description,
         ]);

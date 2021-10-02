@@ -21,7 +21,7 @@
         <div class="form-group">
             <label for="order_date" class="align col-sm-2 control-label">تاريخ الطلبية</label>
                 <div class="col-sm-5">
-                    <input type="date" value="{{old("order_date")}}" class="form-control" name="order_date" id="order_date" placeholder="تاريخ الطلبية">
+                    <span > <strong> {{ date('Y-m-d') }} </strong></span>
                 </div>
         </div>
 
@@ -169,12 +169,12 @@
 
 
 
-                if($("#category_id").val()==""){
+                /*if($("#category_id").val()==""){
                     if(!error)
                         $("#category_id").focus();
                     $("#category_id").addClass("error");
                     error=true;
-                }
+                }*/
 
                 if(id==""){
                     if(!error)
@@ -201,7 +201,7 @@
                 '<td><button class="btn btnDel btn-xs btn-danger"><i class="fa fa-trash"></i></button></td>'+
                 '</tr>');
                 $("#item_id").val("").change().focus();
-                $("#quantity,#unit,#category_id,#item_description").val("");
+                $("#quantity,#unit,#item_description").val("");
                 UpdateHiddenFields();
                   }
             });
