@@ -180,6 +180,19 @@ class ItemController extends Controller
 
     }
 
+    public function Search(Request $req)
+    {
+    	$items = [];
+
+        if($req->has('q')){
+            $search = $req->q;
+            $items = Item::select("id", "name")
+            		  ->where('name', 'LIKE', "%$search%")
+            		  ->get();
+        }
+        return response()->json($items);
+    }
+
 
 
 }

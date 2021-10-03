@@ -51,7 +51,7 @@
                 <div class="col-sm-10">
                     <div class="row">
                         <div class="col-sm-3">
-                            <select name="item_id" id="item_id" class="form-control">
+                            <select name="item_id" id="item_id" class="autosearch form-control">
                                 <option value="">اختر الصنف</option>
 
                             </select>
@@ -223,5 +223,25 @@
 
             });
         }
+
+        $('.autosearch').select2({
+        placeholder: ' اختر الصنف',
+        ajax: {
+            url: '/admin/search',
+            dataType: 'json',
+            delay: 220,
+            processResults: function (data) {
+                return {
+                    results: $.map(data, function (data) {
+                        return {
+                            text: data.name,
+                            id: data.id
+                        }
+                    })
+                };
+            },
+            cache: true
+        }
+    });
     </script>
 @endsection
