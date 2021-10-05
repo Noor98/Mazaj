@@ -23,7 +23,6 @@ Route::resource('units', UnitController::class)->middleware('admin');
 Route::get('/units/{id}/status', [UnitController::class, 'status'])->middleware('admin');
 Route::get('/units/by_order_type/{id}',[UnitController::class, 'by_order_type']);
 
-
 Route::resource('items', ItemController::class)->middleware('admin')->middleware('admin');
 Route::get('/items/{id}/status', [ItemController::class, 'status'])->middleware('admin');
 Route::get('/items/by_order_type/{id}',[ItemController::class, 'by_order_type']);

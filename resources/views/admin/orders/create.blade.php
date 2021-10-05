@@ -223,7 +223,6 @@
 
             });
         }
-
         $('.autosearch').select2({
         placeholder: ' اختر الصنف',
         ajax: {

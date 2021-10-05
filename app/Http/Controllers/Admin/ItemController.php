@@ -187,6 +187,7 @@ class ItemController extends Controller
         if($req->has('q')){
             $search = $req->q;
             $items = Item::select("id", "name")
+                      ->where("status","1")
             		  ->where('name', 'LIKE', "%$search%")
             		  ->get();
         }
