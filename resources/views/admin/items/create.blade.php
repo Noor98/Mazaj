@@ -48,6 +48,12 @@
     </div>
   </div>
 
+  <div class="form-group">
+    <label  for="price" class=" align col-sm-2 control-label"  >سعر الصنف </label>
+    <div class="col-sm-10 col-md-5">
+      <input type="number" min="1" class="form-control" value="{{old('price')}}" id="price" name="price" placeholder="ادخل سعر الصنف">
+    </div>
+  </div>
 
 
   <div class="form-group">

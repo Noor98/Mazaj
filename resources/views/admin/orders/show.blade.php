@@ -57,6 +57,7 @@
             <tr>
                 <th></th>
                 <th>الصنف</th>
+                <th>سعر الصنف</th>
                 <th> الوحدة</th>
                 <th>الكمية</th>
                 <th>ملاحظات</th>
@@ -69,6 +70,7 @@
                         <tr>
                             <td></td>
                             <td>{{$o->item->name}}</td>
+                            <td>{{$o->item->price}}</td>
                             <td>{{$o->item->unit->name}}</td>
                             <td>{{$o->quantity}} </td>
                             <td width="30%">{{$o->item_description}} </td>
@@ -80,6 +82,7 @@
                             <tr>
                                 <td></td>
                                 <td>{{$o->item->name}}</td>
+                                <td>{{$o->item->price}}</td>
                                 <td>{{$o->item->unit->name}}</td>
                                 <td>{{$o->quantity}} </td>
                                 <td width="30%">{{$o->item_description}} </td>

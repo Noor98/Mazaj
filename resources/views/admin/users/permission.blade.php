@@ -35,7 +35,7 @@
   <div class="form-group">
     <div class="col-sm-offset-2 col-sm-10">
       <button type="submit" class="btn btn-primary">حفظ</button>
-        <a href="/admin/users/supplier" class="btn btn-default">الغاء الامر</a>
+        <a href="/admin/users" class="btn btn-default">الغاء الامر</a>
     </div>
   </div>
 </form>

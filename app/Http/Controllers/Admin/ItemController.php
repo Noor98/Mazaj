@@ -32,7 +32,7 @@ class ItemController extends Controller
         $unit_id=request()["unit_id"];
         $items=Item::latest();
         if($q!=NULL)
-            $items->whereRaw("(name like ?)",["%$q%"]);
+            $items->whereRaw("(name  like ? or id  like ?)", ["%$q%","%$q%"]);
         if($status!=NULL)
             $items->whereRaw("status = ?",[$status]);
         if($category_id!=NULL)
@@ -75,6 +75,8 @@ class ItemController extends Controller
             'status' => $request->status?1:0,
             'category_id' => $request->category_id,
             'unit_id' => $request->unit_id,
+            'price' => $request->price,
+
         ]);
         if($item) {
             return redirect()->route('admin.items.index')->withSuccess(" تمت عملية الإضافة بنجاح");
@@ -125,12 +127,13 @@ class ItemController extends Controller
          if($IsExists){
         return redirect("/admin/items/$id/edit")->withInput()->withSuccess("العنصر المنوي ادخاله موجود مسبقا");
          }
-
         $item = Item::find($id)->update([
             'name' => $request->name,
            'status' => $request->status?1:0,
             'category_id' => $request->category_id,
             'unit_id' => $request->unit_id,
+            'price' => $request->price,
+
         ]);
         if($item) {
             return redirect()->route('admin.items.index')->withSuccess(" تمت عماية التعديل بنجاح");
@@ -149,13 +152,11 @@ class ItemController extends Controller
     {
         $item = Item::find($id);
         $item->delete();
-
         return redirect()->back()->withSuccess('تمت عملية الحذف بنجاح');
     }
 
     public function status($id)
     {
-
         $item = Item::find($id);
         if($item == NULL){
             return response()->json([
@@ -180,17 +181,38 @@ class ItemController extends Controller
 
     }
 
+    public function item_price($id)
+    {
+      $item=Item::find($id);
+      $price=$item->price;
+      //dd($price);
+       return response()
+             ->json(['price' => $price]);
+
+
+    }
+
     public function Search(Request $req)
     {
-    	$items = [];
-
+        //dd(auth()->user()->categories);
+        //$items=[];
+    	//foreach(auth()->user()->categories as $c){
+        $items = Item::select("id", "name")
+                    ->where("status","1")->get();
+                    //->where("category_id","$c->id")->get()->toArray();
+       // }
         if($req->has('q')){
             $search = $req->q;
-            $items = Item::select("id", "name")
-                      ->where("status","1")
-            		  ->where('name', 'LIKE', "%$search%")
-            		  ->get();
+            //foreach(auth()->user()->categories as $c){
+                $items = Item::select("id", "name")
+                        ->where("status","1")
+                        //->where("category_id",$c->id)
+                        ->whereRaw("(name  like ? or id  like ?)", ["%$search%","%$search%"])
+                        ->get();
+           // }
         }
+        //dd($items);
+
         return response()->json($items);
     }
 

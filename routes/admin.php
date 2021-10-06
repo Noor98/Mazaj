@@ -27,6 +27,7 @@ Route::resource('items', ItemController::class)->middleware('admin')->middleware
 Route::get('/items/{id}/status', [ItemController::class, 'status'])->middleware('admin');
 Route::get('/items/by_order_type/{id}',[ItemController::class, 'by_order_type']);
 Route::get('/search', [ItemController::class, 'Search']);
+Route::get('/items/item_price/{id}',[ItemController::class, 'item_price']);
 
 Route::get('users/admin', [UserController::class, 'admin'])->name('users.admin')->middleware('admin');
 Route::get('users/branch', [UserController::class, 'branch'])->name('users.branch')->middleware('admin');

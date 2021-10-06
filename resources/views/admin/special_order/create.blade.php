@@ -152,21 +152,8 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-12 row">
-                <div class="col-md-8">
-                    <div class="form-group">
-                        <label class="align control-label col-md-3">متبقي</label>
-                        <div class="col-md-8">
-                        <input name="remaining"  type="number" value="{{ old("remaining") }}"  min="1" class="form-control">
-                        </div>
-                    </div>
-                </div>
-            </div>
-
             <div class="align form-group">
             </div>
-
-
             <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-10">
                   <button type="submit" class="btn btn-primary">إضافة</button>

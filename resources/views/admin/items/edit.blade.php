@@ -53,6 +53,13 @@
     </div>
   </div>
 
+  <div class="form-group">
+    <label for="price" class="col-sm-2 control-label">سعر الصنف </label>
+    <div class="col-sm-10 col-md-5">
+      <input  type="number" class="form-control" value="{{$item->price}}"
+             id="price" name="price" >
+    </div>
+  </div>
 
 
   <div class="form-group">

@@ -28,7 +28,7 @@
 
     <div class="col-sm-7">
         <a class="btn btn-success pull-right" href="{{ route('admin.users.create') }}">
-            <i class="fa fa-plus"></i> اضافة مدير جديد</a>
+            <i class="fa fa-plus"></i> اضافة فرع جديد</a>
     </div>
 </form>
 <br>
@@ -40,7 +40,7 @@
             <th>الاسم </th>
 			<th width="20%">اسم الدخول</th>
 			<th width="30%"> الحالة</th>
-            <th width="10%"></th>
+            <th width="15%"></th>
         </tr>
     </thead>
     <tbody>
@@ -51,6 +51,9 @@
             <td><input type="checkbox" value="{{$u->id}}" class='cbStatus'
                        {{$u->status?"checked":""}} /></td>
             <td>
+                <a href="/admin/users/{{$u->id}}/permission" class="btn btn-xs btn-warning">
+                    <i class="glyphicon glyphicon-lock"></i>
+                </a>
                 <a href="/admin/users/{{$u->id}}/edit" class="btn btn-xs btn-primary">
                     <i class="glyphicon glyphicon-edit"></i>
                 </a>

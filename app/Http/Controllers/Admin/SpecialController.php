@@ -98,7 +98,7 @@ class SpecialController extends Controller
         'employee'        => $request->employee,
         'branch'          => $request->branch,
         'payment'         => $request->payment,
-        'remaining'       => $request->remaining,
+        'remaining'       => ($request->price)-($request->payment),
         'sugar'           => $request->sugar?1:0,
         'classic'         => $request->classic?1:0,
         'special'         => $request->special?1:0,

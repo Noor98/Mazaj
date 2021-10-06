@@ -54,9 +54,12 @@
 <table class="table table-striped table-bordered table-hover">
     <thead>
         <tr>
+            <th width="10%">رقم الصنف</th>
             <th>اسم الصنف</th>
 			<th width="15%">اسم الوحدة</th>
- 			<th width="30%">اسم التصنيف</th>
+ 			<th width="15%">اسم التصنيف</th>
+             <th width="15%">السعر </th>
+
 			<th width="10%">حالة الصنف</th>
             <th width="10%"></th>
         </tr>
@@ -64,9 +67,11 @@
     <tbody>
         @foreach($items as $a)
         <tr>
+            <td>{{$a->id}}</td>
             <td>{{$a->name}}</td>
             <td>{{$a->unit->name}}</td>
             <td>{{$a->category->name}}</td>
+            <td>{{$a->price}}</td>
             <td><input type="checkbox" value="{{$a->id}}" class='cbStatus'
                        {{$a->status?"checked":""}} /></td>
             <td>
