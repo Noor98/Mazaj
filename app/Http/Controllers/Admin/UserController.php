@@ -13,12 +13,6 @@ use App\Http\Controllers\Controller;
 
 class UserController extends Controller
 {
-
-    /**public function __construct() {
-        $this->middleware('admin')->except('index');
-    }*/
-
-
     /**
      * Display a listing of the resource.
      *
@@ -180,10 +174,8 @@ class UserController extends Controller
         $user=User::find($id);
         $categories=Category::all();
         if($user == NULL){
-
             return redirect("/admin/users/supplier")->withSuccess(" الرجاء التأكد من الرابط المطلوب");
         }
-
         return view('admin.users.permission',compact('user','categories'));
     }
 
@@ -198,7 +190,6 @@ class UserController extends Controller
         $user->categories()->sync( $permissions );
         return redirect("/admin/users/$id/permission")->withSuccess("تمت عملية الحفظ بنجاح");;
     }
-
 
     /**
      * Remove the specified resource from storage.

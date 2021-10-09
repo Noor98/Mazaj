@@ -6,6 +6,7 @@ use Session;
 use App\Models\Item;
 use App\Models\Unit;
 use App\Models\Category;
+use App\Models\Category_User;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Requests\ItemRequest;
@@ -112,7 +113,6 @@ class ItemController extends Controller
         }
         return view('admin.items.edit',compact('item','categories','units'));
     }
-
     /**
      * Update the specified resource in storage.
      *
@@ -133,7 +133,6 @@ class ItemController extends Controller
             'category_id' => $request->category_id,
             'unit_id' => $request->unit_id,
             'price' => $request->price,
-
         ]);
         if($item) {
             return redirect()->route('admin.items.index')->withSuccess(" تمت عماية التعديل بنجاح");
@@ -185,34 +184,37 @@ class ItemController extends Controller
     {
       $item=Item::find($id);
       $price=$item->price;
-      //dd($price);
        return response()
              ->json(['price' => $price]);
-
-
     }
-
     public function Search(Request $req)
     {
-        //dd(auth()->user()->categories);
-        //$items=[];
-    	//foreach(auth()->user()->categories as $c){
-        $items = Item::select("id", "name")
-                    ->where("status","1")->get();
-                    //->where("category_id","$c->id")->get()->toArray();
-       // }
-        if($req->has('q')){
-            $search = $req->q;
-            //foreach(auth()->user()->categories as $c){
-                $items = Item::select("id", "name")
+        if(auth()->user()->user_type=="admin"){
+            $items= $items = Item::select("id", "name")
+            ->where("status","1") ->get();
+            if($req->has('q')){
+                $search = $req->q;
+                    $items = Item::select("id", "name")
+                            ->where("status","1")
+                            ->whereRaw("(name  like ? or id  like ?)", ["%$search%","%$search%"])
+                            ->get();
+            }
+        }
+        else{
+            $items = Category_User::select("id", "name")->join("items","category_user.category_id","items.category_id")
                         ->where("status","1")
-                        //->where("category_id",$c->id)
+                        ->where("user_id",auth()->user()->id)
+                        ->get();
+            if($req->has('q')){
+                $search = $req->q;
+                $items = Category_User::select("id", "name")->join("items","category_user.category_id","items.category_id")
+                        ->where("status","1")
+                        ->where("user_id",auth()->user()->id)
                         ->whereRaw("(name  like ? or id  like ?)", ["%$search%","%$search%"])
                         ->get();
-           // }
+            }
         }
         //dd($items);
-
         return response()->json($items);
     }
 
