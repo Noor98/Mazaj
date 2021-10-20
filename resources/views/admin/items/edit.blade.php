@@ -18,15 +18,21 @@
     @csrf
     <input type="hidden" name="_method" value="put" />
 
-  <div class="form-group">
-    <label for="name" class="col-sm-2 control-label">اسم الصنف </label>
-    <div class="col-sm-10 col-md-5">
-      <input autofocus type="text" class="form-control" value="{{$item->name}}"
-             id="name" name="name" >
+    <div class="form-group">
+        <label for="item_num" class="col-sm-2 control-label">رقم الصنف </label>
+        <div class="col-sm-10 col-md-5">
+          <input autofocus type="text" class="form-control" value="{{$item->item_num}}"
+                 id="item_num" name="item_num" >
+        </div>
+      </div>
+
+    <div class="form-group">
+        <label for="name" class="col-sm-2 control-label">اسم الصنف </label>
+        <div class="col-sm-10 col-md-5">
+        <input  type="text" class="form-control" value="{{$item->name}}"
+                id="name" name="name" >
+        </div>
     </div>
-  </div>
-
-
 
      <div class="form-group">
 <label for="category_id" class="col-sm-2 control-label"> التصنيف الرئيسي </label>

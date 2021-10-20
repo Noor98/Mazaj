@@ -11,7 +11,7 @@
     <div class="invoice">
         <div class="row">
             <div class="col-xs-6">
-                <p> التاريخ : <input type="datetime-local" class="date-picker2"></p>
+                <p> التاريخ : <strong> {{ date('Y-m-d H:i:s A') }}</strong></p>
                 <p>الاسم : <span > <strong> {{ auth()->user()->user_name}} </strong></span></p>
             </div>
 
@@ -22,11 +22,30 @@
         <hr />
 
         <div class="row special_order_row ">
+            <!--<div class="col-md-12">
+                <div class="form-group">
+                    <label class="align  control-label col-md-2">رقم الطلبية</label>
+                    <div class="col-md-4">
+                    <input name="order_num" type="text"  value="{{ old("order_num") }}"  class="form-control">
+                    </div>
+                </div>
+            </div>-->
             <div class="col-md-6">
                 <div class="form-group">
                     <label class="align control-label col-md-4">اسم الزبون</label>
                     <div class="col-md-8">
-                        <input type="text"  value="{{ old("name") }}" autofocus  name="name"  class="form-control" />
+                        <select name="customer_id" id="customer_id" class="autosearch form-control">
+                            <option value="">اختر الزيون</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="align control-label col-md-4">اسم الزبون الجدبد</label>
+                    <div class="col-md-8">
+                    <input id="name" name="name" type="text"   value="{{ old("name") }}" class="form-control">
                     </div>
                 </div>
             </div>
@@ -34,7 +53,7 @@
                 <div class="form-group">
                     <label class="align control-label col-md-4">العنوان</label>
                     <div class="col-md-8">
-                    <input name="address" type="text"   value="{{ old("address") }}" class="form-control">
+                    <input id="address" name="address" type="text"   value="{{ old("address") }}" class="form-control">
                     </div>
                 </div>
             </div>
@@ -42,7 +61,7 @@
                 <div class="form-group">
                     <label class="align  control-label col-md-4">جوال</label>
                     <div class="col-md-8">
-                    <input name="mobile" type="text"  value="{{ old("mobile") }}"  class="form-control">
+                    <input id="mobile" name="mobile" type="text"  value="{{ old("mobile") }}"  class="form-control">
                     </div>
                 </div>
             </div>
@@ -98,9 +117,10 @@
                 <div class="form-group">
                     <label class="align control-label col-md-2">النوع</label>
                     <div class="col-md-10">
-                    <label class="control-label"><input {{ old('classic')?"checked":"" }} name="classic" type="checkbox">   كلاسيك</label> &nbsp;&nbsp;&nbsp;
-                    <label class="control-label"><input {{ old('special')?"checked":"" }} name="special" type="checkbox"> سبيشال </label> &nbsp;&nbsp;&nbsp;
-                    <label class="control-label"><input {{ old('sugar')?"checked":"" }} name="sugar" type="checkbox"> سكر  </label> &nbsp;&nbsp;&nbsp;
+                        @foreach ($type as $t )
+                        <label class="control-label"><input   value="{{$t->id}}" name="type[]" type="checkbox">  {{ $t->name}}</label> &nbsp;&nbsp;&nbsp;
+                        @endforeach
+
                     </div>
                 </div>
             </div>
@@ -167,6 +187,53 @@
 
 @stop
 
+@section("js")
+
+<script>
+        $(function(){
+            $("#customer_id").change(function(){
+                    if($(this).val()!=""){
+                        $("#address").val("");
+                        $("#mobile").val("");
+                        $("#name").prop("disabled",true);
+                    var id=$(this).val();
+                    $.get("/admin/customers/by_order_type/"+id,function(json){
+                        $(json.customer).each(function(){
+                            $("#address").val(this.address);
+
+                        });
+                        $(json.customer).each(function(){
+                            $("#mobile").val(this.mobile);
+                        });
+                        },"json");
+                    }
+                    else{
+                        $("#address").val("");
+                        $("#mobile").val("");
+                    }
+            });
+        });
+        $('.autosearch').select2({
+            placeholder: ' اختر الزبون',
+            ajax: {
+                url: '/admin/search/customers',
+                dataType: 'json',
+                delay: 220,
+                processResults: function (data) {
+                    return {
+                        results: $.map(data, function (data) {
+                            return {
+                                text: data.name,
+                                id: data.id
+                            }
+                        })
+                    };
+                },
+                cache: true
+            }
+        });
 
 
 
+</script>
+@endsection

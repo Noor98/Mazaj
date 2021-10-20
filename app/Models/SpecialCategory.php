@@ -5,19 +5,18 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-class SpecialOrder extends Model
+
+class SpecialCategory extends Model
 {
+    public $table = "special_category";
+
     use HasFactory, SoftDeletes;
+
     protected $guarded = [];
 
-    public function special_categories()
+    public function special_orders()
     {
-        return $this->belongsToMany(SpecialCategory::class );
-    }
+        return $this->belongsToMany(SpecialOrder::class);
 
-    public function customer()
-    {
-       return $this->belongsTo(Customer::class);
     }
-
 }

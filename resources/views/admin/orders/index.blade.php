@@ -48,7 +48,9 @@
             <th>الحالة</th>
             <th width="20%">تاريخ القراءة</th>
             <th width="20%">ملاحظات</th>
-
+            @if(auth()->user()->user_type=='admin')
+            <th width="20%">محذوفة بواسطة </th>
+            @endif
             <th width="10%"></th>
         </tr>
     </thead>
@@ -56,36 +58,39 @@
         @foreach($orders as $o)
 
             @if(auth()->user()->user_type=='admin')
-            <tr>
-                <td>{{$o->id}}</td>
-                <td>{{$o->user->name}}</td>
-                <td>{{date('Y-m-d', strtotime($o->order_date))}}</td>
-                <td>
-                @if($o->order_status==0)
-                    <strong><span style="color: red">جديدة</span></strong>
-                @else
-                <strong> <span style="color: rgb(20, 184, 20)">مقروءة</span></strong>
-                @endif
-                </td>
-                <td>
-                    @if($o->read_date!="")
-                    {{$o->read_date}}
+                <tr>
+                    <td>{{$o->id}}</td>
+                    <td>{{$o->user->name}}</td>
+                    <td>{{date('Y-m-d', strtotime($o->order_date))}}</td>
+                    <td>
+                    @if($o->order_status==0)
+                        <strong><span style="color: red">جديدة</span></strong>
+                    @else
+                    <strong> <span style="color: rgb(20, 184, 20)">مقروءة</span></strong>
                     @endif
-                </td>
-                <td>{{$o->description}}</td>
-                <td>
-                    <a title="" href="/admin/orders/{{ $o->id }}" class="btn btn-info btn-xs">
+                    </td>
+                    <td>
+                        @if($o->read_date!="")
+                        {{$o->read_date}}
+                        @endif
+                    </td>
+                    <td>{{$o->description}}</td>
+                    <td>{{$o->deleted_at}} _ {{$o->deleted_by}}</td>
+                    <td>
+                        @if ($o->deleted_at==null)
+                        <a title="" href="/admin/orders/{{ $o->id }}" class="btn btn-info btn-xs">
 
-                        <i class="glyphicon glyphicon-list"></i>
-                    </a>
+                            <i class="glyphicon glyphicon-list"></i>
+                        </a>
 
-                    <form class="inline" action="{{ route('admin.orders.destroy', $o->id) }}" method="POST">
-                        @csrf
-                        @method('delete')
-                        <button onclick="return confirm('هل انت متأكد من الاستمرار في العملية؟')" class="btn Confirm btn-xs btn-danger"><i class="glyphicon glyphicon-trash"></i></button>
-                    </form>
-                </td>
-            </tr>
+                        <form class="inline" action="{{ route('admin.orders.destroy', $o->id) }}" method="POST">
+                            @csrf
+                            @method('delete')
+                            <button onclick="return confirm('هل انت متأكد من الاستمرار في العملية؟')" class="btn Confirm btn-xs btn-danger"><i class="glyphicon glyphicon-trash"></i></button>
+                        </form>
+                        @endif
+                    </td>
+                </tr>
             @elseif (auth()->user()->user_type=='supplier')
                 <?php $F= false;?>
                 @foreach($o->details as $i)
@@ -139,7 +144,6 @@
         @endforeach
     </tbody>
   </table>
-          {{$orders->links()}}
     @else
      <br>
      <br>

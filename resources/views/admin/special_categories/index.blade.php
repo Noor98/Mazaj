@@ -1,10 +1,10 @@
 @extends("admin.master")
 
 @section("title")
-التصنفات
+ التصنفات الخاصة
 @endsection
 @section("subtitle")
-يمكنك اضافة حذف وتعديل التصنيفات
+يمكنك اضافة حذف وتعديل التصنيفات الخاصة
 @endsection
 
 
@@ -26,8 +26,8 @@
     <div class="col-sm-2">
     </div>
     <div class="col-sm-3">
-        <a class="btn btn-success pull-right" href="/admin/categories/create">
-            <i class="fa fa-plus"></i> اضافة تصنيف جديد</a>
+        <a class="btn btn-success pull-right" href="/admin/special_categories/create">
+            <i class="fa fa-plus"></i> اضافة تصنيف خاص جديد</a>
     </div>
 </form>
 <br>
@@ -35,9 +35,10 @@
 <table class="table table-striped table-bordered table-hover">
     <thead>
         <tr>
-            <th  width="30%">التصنيف</th>
+            <th  width="30%">التصنيف الخاص</th>
             <th width="10%">الحالة</th>
-            <th width="5%"></th>
+            <th width="20%">محذوف بواسطة</th>
+            <th width="10%"></th>
         </tr>
     </thead>
     <tbody>
@@ -45,13 +46,13 @@
         <tr>
             <td>{{$a->name}}</td>
             <td><input type="checkbox" value="{{$a->id}}" class='cbStatus' {{$a->status?"checked":""}} /></td>
+            <td>{{$a->deleted_at}} _ {{$a->deleted_by}}</td>
             <td>
                 @if ($a->deleted_at==null)
-                <a href="/admin/categories/{{$a->id}}/edit" class="btn btn-xs btn-primary">
+                <a href="/admin/special_categories/{{$a->id}}/edit" class="btn btn-xs btn-primary">
                     <i class="glyphicon glyphicon-edit"></i>
                 </a>
-
-                <form  class="inline" action="{{ route('admin.categories.destroy', $a->id) }}" method="POST">
+                <form  class="inline" action="{{ route('admin.special_categories.destroy', $a->id) }}" method="POST">
                     @csrf
                     @method('delete')
                     <button  onclick="return confirm('هل انت متأكد من الاستمرار في العملية؟')" class="btn Confirm btn-xs btn-danger"><i class="glyphicon glyphicon-trash"></i></button>
@@ -76,7 +77,7 @@
         $(function(){
             $(".cbStatus").click(function(){
                 var id = $(this).val();
-                $.get("/admin/categories/"+id+"/status");
+                $.get("/admin/special_categories/"+id+"/status");
             });
         });
     </script>

@@ -51,7 +51,7 @@
 			<th width="15%">اسم الدخول</th>
  			<th width="30%"> تصنيف المستخدم</th>
 			<th width="10%"> الحالة</th>
-            <th width="10%"></th>
+            <th width="15%"></th>
         </tr>
     </thead>
     <tbody>
@@ -70,6 +70,9 @@
             <td><input type="checkbox" value="{{$u->id}}" class='cbStatus'
                        {{$u->status?"checked":""}} /></td>
             <td>
+                <a href="/admin/users/{{$u->id}}/permission" class="btn btn-xs btn-warning">
+                    <i class="glyphicon glyphicon-lock"></i>
+                </a>
                 <a href="/admin/users/{{$u->id}}/edit" class="btn btn-xs btn-primary">
                     <i class="glyphicon glyphicon-edit"></i>
                 </a>

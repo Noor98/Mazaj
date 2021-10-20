@@ -2,21 +2,14 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\Category;
+use App\Models\SpecialCategory;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use App\Models\Category_User;
 use App\Http\Controllers\Controller;
 use Symfony\Component\HttpFoundation\Session\Session;
 
-class CategoryController extends Controller
+class SpecialCategoryController extends Controller
 {
-
-    /**public function __construct() {
-        $this->middleware('admin')->except('index');
-    }*/
-
-
     /**
      * Display a listing of the resource.
      *
@@ -26,17 +19,12 @@ class CategoryController extends Controller
     {
         $status=request()["status"];
         $q=request()["q"];
-        //$items=Category::Latest()->withTrashed()->get();
-        $items = Category_User::join("categories","category_user.category_id","categories.id")
-                        ->where("user_id",auth()->user()->id)
-                        ->latest()
-                        ->get();
-        //dd($items);
+        $items=SpecialCategory::latest()->withTrashed()->get();
         if($q!=NULL)
             $items=$items->where("name","like","$q");
         if($status!=NULL)
-            $items=$items->where("status","=","$status");
-        return view('admin.categories.index',compact('items','q','status'));
+            $items=$items->where("status","=",$status);
+        return view('admin.special_categories.index',compact('items','q','status'));
     }
 
     /**
@@ -46,7 +34,7 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        return view('admin.categories.create');
+        return view('admin.special_categories.create');
     }
 
     /**
@@ -60,16 +48,16 @@ class CategoryController extends Controller
         $request->validate([
             'name' => 'required'
         ]);
-        $IsExists =Category::where("name",$request["name"])->where("deleted_at",null)->count()>0;
+        $IsExists =SpecialCategory::where("name",$request["name"])->where("deleted_at",null)->count()>0;
         if($IsExists){
-            return redirect("/admin/categories/create")->withInput()->withSuccess("العنصر المنوي ادخاله موجود مسبقا");
+            return redirect("/admin/special_categories/create")->withInput()->withSuccess("العنصر المنوي ادخاله موجود مسبقا");
         }
-        $category = Category::create([
+        $category = SpecialCategory::create([
             'name' => $request->name,
             'status' => $request->status?1:0,
         ]);
         if($category) {
-            return redirect()->route('admin.categories.index')->withSuccess(" تمت عملية الإضافة بنجاح");;
+            return redirect()->route('admin.special_categories.index')->withSuccess(" تمت عملية الإضافة بنجاح");;
         }else {
             return redirect()->back()->withSuccess('يوجد خطأ في معلوماتك');
         }
@@ -94,11 +82,11 @@ class CategoryController extends Controller
      */
     public function edit($id)
     {
-        $item=Category::find($id);
-        if($item == NULL){
-            return redirect("/admin/categories")->withSuccess(" الرجاء التأكد من الرابط المطلوب");
+        $category=SpecialCategory::find($id);
+        if($category == NULL){
+            return redirect("/admin/special_categories")->withSuccess(" الرجاء التأكد من الرابط المطلوب");
         }
-        return view('admin.categories.edit',compact('item'));
+        return view('admin.special_categories.edit',compact('category'));
     }
 
     /**
@@ -113,17 +101,17 @@ class CategoryController extends Controller
         $request->validate([
             'name' => 'required'
         ]);
-        $IsExists = Category::where("name",$request["name"])
+        $IsExists = SpecialCategory::where("name",$request["name"])
         ->where("deleted_at",null)->where("id",'!=',$id)->count()>0;
          if($IsExists){
-        return redirect("/admin/categories/$id/edit")->withInput()->withSuccess("العنصر المنوي ادخاله موجود مسبقا");
+        return redirect("/admin/special_categories/$id/edit")->withInput()->withSuccess("العنصر المنوي ادخاله موجود مسبقا");
          }
-        $category = Category::find($id)->update([
+        $category = SpecialCategory::find($id)->update([
             'name' => $request->name,
             'status' => $request->status?1:0
         ]);
         if($category) {
-            return redirect()->route('admin.categories.index')->withSuccess(" تمت عماية التعديل بنجاح");
+            return redirect()->route('admin.special_categories.index')->withSuccess(" تمت عماية التعديل بنجاح");
         }else {
             return redirect()->back()->withSuccess('يوجد خطأ في معلوماتك');
         }
@@ -137,10 +125,10 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
-        $cat = Category::find($id);
-        if($cat->items->count()>0){
-            return redirect()->route('admin.categories.index')->withSuccess("لا يمكن حذف التصنيف لاحتوائه على اصناف");
-        }
+        $cat = SpecialCategory::find($id)->update([
+            'deleted_by' => auth()->user()->user_name,
+        ]);
+        $cat = SpecialCategory::find($id);
         $cat->delete();
 
         return redirect()->back()->withSuccess('تمت عملية الحذف بنجاح');
@@ -149,7 +137,7 @@ class CategoryController extends Controller
 
     public function status($id)
     {
-        $item = Category::find($id);
+        $item = SpecialCategory::find($id);
         if($item == NULL){
             return response()->json([
                 'status' => '0',

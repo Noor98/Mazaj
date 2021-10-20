@@ -16,12 +16,20 @@
 @section("content")
 <form action="/admin/items" enctype="multipart/form-data" method="post" class="form-horizontal">
     @csrf
-  <div class="form-group">
-    <label  for="name" class=" align col-sm-2 control-label"  >اسم الصنف </label>
-    <div class="col-sm-10 col-md-5">
-      <input autofocus type="text" class="form-control" value="{{old('name')}}" id="name" name="name" placeholder="ادخل اسم الصنف">
+
+    <div class="form-group">
+        <label  for="item_num" class=" align col-sm-2 control-label"  >رقم الصنف </label>
+        <div class="col-sm-10 col-md-5">
+          <input  type="text" class="form-control" value="{{old('item_num')}}" id="item_num" name="item_num" placeholder="ادخل رقم الصنف">
+        </div>
+      </div>
+
+    <div class="form-group">
+        <label  for="name" class=" align col-sm-2 control-label"  >اسم الصنف </label>
+        <div class="col-sm-10 col-md-5">
+        <input  type="text" class="form-control" value="{{old('name')}}" id="name" name="name" placeholder="ادخل اسم الصنف">
+        </div>
     </div>
-  </div>
 
      <div class="form-group">
     <label for="category_id" class="align col-sm-2 control-label"> التصنيف الرئيسي</label>

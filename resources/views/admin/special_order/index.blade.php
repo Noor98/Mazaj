@@ -47,6 +47,7 @@
             <th>تاريخ الطلبية</th>
             <th>الحالة</th>
             <th width="20%">تاريخ القراءة</th>
+            <th width="20%"> محذوفة بواسطة</th>
             <th width="10%"></th>
         </tr>
     </thead>
@@ -54,7 +55,7 @@
         @foreach($orders as $o)
         <tr>
             <td>{{$o->id}}</td>
-            <td>{{$o->name}}</td>
+            <td>{{$o->customer->name}}</td>
             <td>{{date('Y-m-d', strtotime($o->date))}}</td>
             <td>
              @if($o->status==0)
@@ -68,7 +69,9 @@
                 {{date('Y-m-d h:i:s A', strtotime($o->read_date))}}
                 @endif
             </td>
+            <td> {{$o->deleted_at}} _ {{$o->deleted_by}}</td>
             <td>
+                @if ($o->deleted_at==null)
                 <a title="" href="/admin/special_order/{{ $o->id }}" class="btn  btn-info btn-xs">
 
                     <i class="glyphicon glyphicon-list"></i>
@@ -81,12 +84,12 @@
                     <button onclick="return confirm('هل انت متأكد من الاستمرار في العملية؟')" class="btn Confirm btn-xs btn-danger"><i class="glyphicon glyphicon-trash"></i></button>
                 </form>
                 @endif
+                @endif
             </td>
         </tr>
         @endforeach
     </tbody>
   </table>
-           {{$orders->links()}}
     @else
      <br>
      <br>

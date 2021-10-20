@@ -130,44 +130,6 @@ class UserController extends Controller
         }
     }
 
-    public function admin()
-    {
-        $status=request()["status"];
-        $q=request()["q"];
-        $users=User::Where('user_type','admin');
-        if($q!=NULL)
-            $users->whereRaw("(user_name  like ? or name  like ?)",["%$q%","%$q%"]);
-        if($status!=NULL)
-            $users->whereRaw("status = ?",[$status]);
-        $users = $users->paginate(10)->appends(["q"=>$q,"status"=>$status]);
-        return view('admin.users.admin',compact('users','q','status'));
-    }
-
-    public function supplier()
-    {
-        $status=request()["status"];
-        $q=request()["q"];
-        $users=User::Where('user_type','supplier');
-        if($q!=NULL)
-            $users->whereRaw("(user_name  like ? or name  like ?)",["%$q%","%$q%"]);
-        if($status!=NULL)
-            $users->whereRaw("status = ?",[$status]);
-        $users = $users->paginate(10)->appends(["q"=>$q,"status"=>$status]);
-        return view('admin.users.supplier',compact('users','q','status'));
-    }
-
-    public function branch()
-    {
-        $status=request()["status"];
-        $q=request()["q"];
-        $users=User::Where('user_type','branch');
-        if($q!=NULL)
-            $users->whereRaw("(user_name  like ? or name  like ?)",["%$q%","%$q%"]);
-        if($status!=NULL)
-            $users->whereRaw("status = ?",[$status]);
-        $users = $users->paginate(10)->appends(["q"=>$q,"status"=>$status]);
-        return view('admin.users.branch',compact('users','q','status'));
-    }
 
     public function permission($id)
     {

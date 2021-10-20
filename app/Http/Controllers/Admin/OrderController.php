@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
+use Carbon\Carbon;
 use App\Models\Item;
 use App\Models\User;
 use App\Models\Order;
@@ -8,10 +9,10 @@ use App\Models\Category;
 use App\Models\OrderDetails;
 use App\Models\SpecialOrder;
 use Illuminate\Http\Request;
+use App\Models\Category_User;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests\OrderRequest;
 use App\Http\Controllers\Controller;
-use Carbon\Carbon;
 
 class OrderController extends Controller
 {
@@ -34,21 +35,20 @@ class OrderController extends Controller
         $order_status=$request["order_status"];
         $from=$request["from"];
         $to=$request["to"];
-        $orders=Order::latest();
+        $orders=Order::Latest()->withTrashed()->get();
         if ($q!="") {
-            $orders=Order::join("users","user_id","users.id")
-            ->whereRaw("true")->whereRaw("(order_no  like ? or name  like ?)",["%$q%","%$q%"]);
+            $orders=$orders->where("id", "like","$q");
         }
         if ($order_status!="") {
-            $orders=$orders->whereRaw(("(order_status like ?)"), ["%$order_status%"]);
+            $orders=$orders->where("order_status", "like","$order_status");
         }
         if($from!="")
-            $orders=$orders->whereRaw("order_date >= ?",[$from]);
+            $orders=$orders->where("order_date",">=",$from);
         if($to!="")
-            $orders=$orders->whereRaw("order_date <= ?",[$to]);
-        $orders=$orders
-            ->paginate(10)
-            ->appends(["q"=>$q,"order_status"=>$order_status,"from"=>$from,"to"=>$to]);
+            $orders=$orders->where("order_date","<=",$to);
+        //$orders=$orders
+        //    ->paginate(10)
+        //    ->appends(["q"=>$q,"order_status"=>$order_status,"from"=>$from,"to"=>$to]);
         return view("admin.orders.index", compact(
             "orders",
             "q",
@@ -68,8 +68,18 @@ class OrderController extends Controller
      */
     public function create()
     {
-        $categories=Category::where("status","1")->get();
-        return view('admin.orders.create',compact('categories'));
+        if(date('H:i:s A')>= "08:00:00 AM" && date('H:i:s A')<="24:00:00 AM"){
+            $categories=Category_User::join("categories","category_user.category_id","categories.id")
+            ->where("user_id",auth()->user()->id)
+            ->where("status","1")
+            ->latest()
+            ->get();
+            return view('admin.orders.create',compact('categories'));
+        }
+        else
+            return redirect()->route('admin.my_orders')->withSuccess(" غير مسموح إنشاء طلبية في هذا الوقت");
+
+
     }
 
     /**
@@ -150,11 +160,11 @@ class OrderController extends Controller
         $q=$request["q"];
         $from=$request["from"];
         $to=$request["to"];
-        $orders=Order::where("user_id",auth()->user()->id);
-        $special_orders=SpecialOrder::where("created_by",auth()->user()->user_name);
+        $orders=Order::Latest()->where("user_id",auth()->user()->id);
+        $special_orders=SpecialOrder::Latest()->where("created_by",auth()->user()->user_name);
         if ($q!="") {
-            $orders=$orders->whereRaw("true")->whereRaw("(order_no  like ?)",["%$q%"]);
-            $special_orders=$special_orders->whereRaw("true")->whereRaw("(order_no  like ?)",["%$q%"]);
+            $orders=$orders->whereRaw("true")->whereRaw("(id  like ?)",["%$q%"]);
+            $special_orders=$special_orders->whereRaw("true")->whereRaw("(id  like ?)",["%$q%"]);
         }
         if($from!=""){
         $orders=$orders->where("order_date",">=" ,$from);
@@ -213,8 +223,6 @@ class OrderController extends Controller
         }
    }
 
-
-
     public function edit($id)
     {
         //
@@ -240,6 +248,9 @@ class OrderController extends Controller
      */
     public function destroy($id)
     {
+        $order = Order::find($id)->update([
+            'deleted_by' => auth()->user()->user_name,
+        ]);
         $order = Order::find($id);
         $order->delete();
         foreach($order->details as $o)

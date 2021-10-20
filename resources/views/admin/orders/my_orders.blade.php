@@ -46,7 +46,7 @@
         @foreach($orders as $o)
         <tr>
             <td>{{$o->id}}</td>
-            <td>{{date('Y-m-d', strtotime($o->order_date))}}</td>
+            <td>{{date('Y-m-d  H:i:s A', strtotime($o->created_at)) }}</td>
             <td>{{$o->description}}</td>
             <td>
                 <a title="" href="/admin/orders/my_orders/{{ $o->id }}" class="btn PopUp btn-info btn-xs">
@@ -60,7 +60,7 @@
         @foreach($special_orders as $o)
         <tr>
             <td>{{$o->id}}</td>
-            <td>{{date('Y-m-d', strtotime($o->date))}}</td>
+            <td>{{date('Y-m-d  H:i:s A', strtotime($o->created_at))}}</td>
             <td></td>
             <td>
                 <a title="" href="/admin/special_order/my_orders/{{ $o->id }}" class="btn PopUp btn-info btn-xs">

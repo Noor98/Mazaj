@@ -25,6 +25,7 @@ class ItemRequest extends FormRequest
     {
         return [
             'name' => 'required',
+            'item_num' => 'required',
             'category_id' => 'required',
             'unit_id' => 'required'
         ];

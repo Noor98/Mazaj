@@ -25,7 +25,7 @@
                 </div>
         </div>
 
-        {{--<div class="form-group">
+        <div class="form-group">
              <label for="name" class="align col-sm-2 control-label"> التصنيف</label>
                 <div class="col-sm-5">
                     <select name="category_id" id="category_id" class="form-control">
@@ -35,7 +35,7 @@
                         @endforeach
                     </select>
                  </div>
-        </div>--}}
+        </div>
 
 
 
@@ -127,7 +127,7 @@
 
     <script>
        $(function(){
-            /*$("#category_id").change(function(){
+            $("#category_id").change(function(){
                 $("#item_id").prop("disabled",true);
                 $("#item_id").children(":gt(0)").remove();
                 var id=$(this).val();
@@ -137,7 +137,7 @@
                         $("#item_id").append("<option value='"+this.id+"'>"+this.name+"</option>");
                     });
                 },"json");
-            });*/
+            });
 
             $("#item_id").change(function(){
                 if($(this).val()!=""){
@@ -181,8 +181,6 @@
                 var quantity=$("#quantity").val();
                 var item_description=$("#item_description").val();
                 var error=false;
-
-
 
                 /*if($("#category_id").val()==""){
                     if(!error)
@@ -240,10 +238,10 @@
 
             });
         }
-        $('.autosearch').select2({
+        /*$('.autosearch').select2({
         placeholder: ' اختر الصنف',
         ajax: {
-            url: '/admin/search',
+            url: '/admin/search/items',
             dataType: 'json',
             delay: 220,
             processResults: function (data) {
@@ -258,6 +256,6 @@
             },
             cache: true
         }
-    });
+        });*/
     </script>
 @endsection

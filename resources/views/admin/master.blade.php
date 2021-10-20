@@ -213,6 +213,29 @@
 
                             </ul>
                          </li>
+                         <li class="nav-item start ">
+                            <a href="javascript:;" class="nav-link nav-toggle">
+                                <i class="icon-list"></i>
+                                <span class="title"> التصنيفات الخاصة</span>
+                                <span class="arrow"></span>
+                            </a>
+                            <ul class="sub-menu">
+                                <li class="nav-item start ">
+                                    <a href="{{ route('admin.special_categories.index') }}" class="mazaj nav-link ">
+                                        <i class="fa fa-list"></i>
+                                        <span class="title">ادارة التصنيفات الخاصة</span>
+                                    </a>
+                                </li>
+
+                                <li class="nav-item start ">
+                                    <a href="{{ route('admin.special_categories.create') }}" class="nav-link ">
+                                        <i class="icon-plus"></i>
+                                        <span class="title">اضافة تصنيف خاص  جديد</span>
+                                    </a>
+                                </li>
+
+                            </ul>
+                         </li>
 
                          <li class="nav-item start ">
                             <a href="javascript:;" class="nav-link nav-toggle">
@@ -236,7 +259,30 @@
                                 </li>
 
                             </ul>
-                         </li>
+                          </li>
+                          <li class="nav-item start ">
+                            <a href="javascript:;" class="nav-link nav-toggle">
+                                <i class="icon-users"></i>
+                                <span class="title">الزبائن</span>
+                                <span class="arrow"></span>
+                            </a>
+                            <ul class="sub-menu">
+                                <li class="nav-item start ">
+                                    <a href="{{ route('admin.customers.index') }}" class="nav-link ">
+                                        <i class="fa fa-user"></i>
+                                        <span class="title">ادارة الزبائن</span>
+                                    </a>
+                                </li>
+
+                                <li class="nav-item start ">
+                                    <a href="{{ route('admin.customers.create') }}" class="nav-link ">
+                                        <i class="icon-plus"></i>
+                                        <span class="title">اضافة زبون جديد</span>
+                                    </a>
+                                </li>
+
+                            </ul>
+                          </li>
 
                          <li class="nav-item start ">
                             <a href="javascript:;" class="nav-link nav-toggle">
@@ -251,28 +297,6 @@
                                         <span class="title">ادارة المستخدمين</span>
                                     </a>
                                 </li>
-
-                                <li class="nav-item start ">
-                                    <a href="{{ route('admin.users.admin') }}" class="nav-link ">
-                                        <i class="fa fa-user"></i>
-                                        <span class="title">ادارة المدراء</span>
-                                    </a>
-                                </li>
-
-                                <li class="nav-item start ">
-                                    <a href="{{ route('admin.users.branch') }}" class="nav-link ">
-                                        <i class="fa fa-user"></i>
-                                        <span class="title">ادارة الفروع</span>
-                                    </a>
-                                </li>
-
-                                <li class="nav-item start ">
-                                    <a href="{{ route('admin.users.supplier') }}" class="nav-link ">
-                                        <i class="fa fa-user"></i>
-                                        <span class="title">ادارة الموردون</span>
-                                    </a>
-                                </li>
-
                                 <li class="nav-item start ">
                                     <a href="{{ route('admin.users.create') }}" class="nav-link ">
                                         <i class="icon-plus"></i>
@@ -369,7 +393,7 @@
         <!-- BEGIN FOOTER -->
         <div class="mazaj page-footer">
 
-            <div class="page-footer-inner">{{date("Y")}} &copy;جميع الحقوق محفوظة لشركة بدري و هنية
+            <div class="page-footer-inner">{{date("Y")}} &copy; جميع الحقوق محفوظة لشركة بدري و هنية
 
 
             </div>

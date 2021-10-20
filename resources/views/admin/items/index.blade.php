@@ -67,10 +67,10 @@
     <tbody>
         @foreach($items as $a)
         <tr>
-            <td>{{$a->id}}</td>
+            <td>{{$a->item_num}}</td>
             <td>{{$a->name}}</td>
-            <td>{{$a->unit->name}}</td>
-            <td>{{$a->category->name}}</td>
+            <td>{{$a->u_name}}</td>
+            <td>{{$a->c_name}}</td>
             <td>{{$a->price}}</td>
             <td><input type="checkbox" value="{{$a->id}}" class='cbStatus'
                        {{$a->status?"checked":""}} /></td>
@@ -96,9 +96,6 @@
 <br>
 <div class="alert alert-warning"><b>نأسف</b>, لا يوجد بيانات لعرضها ...</div>
 @endif
-{{$items->links()}}
-
-
 @endsection
 
 @section("js")

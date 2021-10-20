@@ -31,17 +31,24 @@ class ItemController extends Controller
         $q=request()["q"];
         $category_id=request()["category_id"];
         $unit_id=request()["unit_id"];
-        $items=Item::latest();
+        $items = Category_User::select("items.item_num","items.name as name","items.id","items.status","items.price","units.name as u_name","categories.name as c_name","items.category_id","items.unit_id")
+                        ->join("items","category_user.category_id","items.category_id")
+                        ->join("units","items.unit_id","units.id")
+                        ->join("categories","items.category_id","categories.id")
+                        ->where("user_id",auth()->user()->id)
+                        ->where("items.deleted_at",null)
+                        ->orderBy("items.created_at",'desc')
+                        ->get();
         if($q!=NULL)
-            $items->whereRaw("(name  like ? or id  like ?)", ["%$q%","%$q%"]);
+            $items=$items->where("name","like","$q");
         if($status!=NULL)
-            $items->whereRaw("status = ?",[$status]);
+            $items=$items->where("status","=",$status);
         if($category_id!=NULL)
-            $items->whereRaw("category_id = ?",[$category_id]);
+            $items=$items->where("category_id","=",$category_id);
         if($unit_id!=NULL)
-            $items->whereRaw("unit_id = ?",[$unit_id]);
+            $items=$items->where("unit_id","=",$unit_id);
 
-        $items = $items->paginate(10)->appends(["q"=>$q,"status"=>$status,"category_id"=>$category_id,"unit_id"=>$unit_id]);
+        //$items = $items->paginate(10)->appends(["q"=>$q,"status"=>$status,"category_id"=>$category_id,"unit_id"=>$unit_id]);
         $categories=Category::all();
         $units=Unit::all();
         return view('admin.items.index',compact('items','q','status','category_id','unit_id','categories','units'));
@@ -69,10 +76,15 @@ class ItemController extends Controller
     {
         $IsExists =Item::where("name",$request["name"])->where("deleted_at",null)->count()>0;
         if($IsExists){
-            return redirect("/admin/items/create")->withInput()->withSuccess("العنصر المنوي ادخاله موجود مسبقا");
+            return redirect("/admin/items/create")->withInput()->withSuccess("العنصر المنوي ادخاله موجود مسبقا/ اختر اسم صنف آخر");
+        }
+        $IsExists =Item::where("item_num",$request["item_num"])->where("deleted_at",null)->count()>0;
+        if($IsExists){
+            return redirect("/admin/items/create")->withInput()->withSuccess("العنصر المنوي ادخاله موجود مسبقا/ اختر رقم صنف آخر");
         }
         $item = Item::create([
             'name' => $request->name,
+            'item_num' => $request->item_num,
             'status' => $request->status?1:0,
             'category_id' => $request->category_id,
             'unit_id' => $request->unit_id,
@@ -125,11 +137,17 @@ class ItemController extends Controller
         $IsExists = Item::where("name",$request["name"])
         ->where("deleted_at",null)->where("id",'!=',$id)->count()>0;
          if($IsExists){
-        return redirect("/admin/items/$id/edit")->withInput()->withSuccess("العنصر المنوي ادخاله موجود مسبقا");
+        return redirect("/admin/items/$id/edit")->withInput()->withSuccess("العنصر المنوي ادخاله موجود مسبقا/ اختراسمصنف آخر");
+         }
+         $IsExists = Item::where("item_num",$request["item_num"])
+        ->where("deleted_at",null)->where("id",'!=',$id)->count()>0;
+         if($IsExists){
+        return redirect("/admin/items/$id/edit")->withInput()->withSuccess("العنصر المنوي ادخاله موجود مسبقا/ اختر رقم صنف آخر");
          }
         $item = Item::find($id)->update([
             'name' => $request->name,
-           'status' => $request->status?1:0,
+            'item_num' => $request->item_num,
+            'status' => $request->status?1:0,
             'category_id' => $request->category_id,
             'unit_id' => $request->unit_id,
             'price' => $request->price,
@@ -176,8 +194,6 @@ class ItemController extends Controller
        $items = Item::Where("category_id",$id)->where("status","1")->get();
        return response()
              ->json(['items' => $items]);
-
-
     }
 
     public function item_price($id)
@@ -189,18 +205,6 @@ class ItemController extends Controller
     }
     public function Search(Request $req)
     {
-        if(auth()->user()->user_type=="admin"){
-            $items= $items = Item::select("id", "name")
-            ->where("status","1") ->get();
-            if($req->has('q')){
-                $search = $req->q;
-                    $items = Item::select("id", "name")
-                            ->where("status","1")
-                            ->whereRaw("(name  like ? or id  like ?)", ["%$search%","%$search%"])
-                            ->get();
-            }
-        }
-        else{
             $items = Category_User::select("id", "name")->join("items","category_user.category_id","items.category_id")
                         ->where("status","1")
                         ->where("user_id",auth()->user()->id)
@@ -212,8 +216,7 @@ class ItemController extends Controller
                         ->where("user_id",auth()->user()->id)
                         ->whereRaw("(name  like ? or id  like ?)", ["%$search%","%$search%"])
                         ->get();
-            }
-        }
+                }
         //dd($items);
         return response()->json($items);
     }

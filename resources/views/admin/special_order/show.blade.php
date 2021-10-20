@@ -17,41 +17,43 @@
 @section("content")
 <div class=" main-content-body-invoice" id="print">
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-8">
             <h3 class="page-title">طلبية خاصة # {{ $order->id }}
             </h3>
         </div>
+        <div class="col-xs-4 invoice-logo-space">
+            <img src="/metronic-rtl/assets/layouts/layout/img/logoo.png"  alt="" />
+    </div>
     </div>
 
+
+    <h1 style="text-align:center"> <strong>{{ $order->created_by}}</strong></h1>
 
             <div class="row">
                 <div class="col-xs-6">
                     <p><strong> التاريخ : </strong><label  >  {{ $order->date}}  </label></p>
-                    <p><strong>الاسم :</strong> <span>{{ $order->created_by}}</span></p>
                 </div>
 
-                <div class="col-xs-6 invoice-logo-space">
-                        <img src="/metronic-rtl/assets/layouts/layout/img/logoo.png"  alt="" />
-                </div>
+
             </div>
             <div class="row special_order_row ">
                 <table class="table table-striped ">
                     <tr >
                         <td  class="col-xs-6">
                             <label class=" control-label col-md-4"><strong>اسم الزبون :</strong></label>
-                            <label  class=" col-md-8">{{ $order->name}}  </label>
+                            <label  class=" col-md-8">{{ $order->customer->name}}  </label>
 
                         </td>
                         <td class="col-xs-6">
                             <label class=" control-label col-md-4"><strong>العنوان :</strong></label>
-                            <label  class="col-md-8">{{ $order->address}}  </label>
+                            <label  class="col-md-8">{{ $order->customer->address}}  </label>
 
                     </td>
                     </tr>
                     <tr>
                         <td class="col-md-6">
                             <label class="  control-label col-md-4"><strong>جوال :</strong></label>
-                            <label class="col-md-8">{{ $order->mobile}}  </label>
+                            <label class="col-md-8">{{ $order->customer->mobile}}  </label>
 
                         </td>
                         <td class="col-md-6">
@@ -92,9 +94,12 @@
                         <td class="col-md-6">
                             <label class="control-label col-md-2"><strong>النوع :</strong></label>
                                 <label class="col-md-12" >
-                                    <label  class="col-md-4" ><input disabled {{ $order->classic?"checked":""}} name="classic" type="checkbox">   كلاسيك</label> &nbsp;&nbsp;&nbsp;
-                                    <label  class="col-md-4"><input disabled  {{ $order->special?"checked":""}} name="special"  type="checkbox"> سبيشال </label> &nbsp;&nbsp;&nbsp;
-                                    <label  class="col-md-0"><input disabled {{ $order->sugar?"checked":""}}   name="sugar"    type="checkbox"> سكر    </label> &nbsp;&nbsp;&nbsp;
+                                    @foreach ($type as $t )
+                                    <?php
+                                    $checked =  $order->special_categories()->where("id",$t->id)->count();
+                                    ?>
+                                    <label class="control-label"><input {{$checked?'checked':''}} value="{{$t->id}}" name="type[]" type="checkbox">  {{ $t->name}}</label> &nbsp;&nbsp;&nbsp;
+                                    @endforeach
                                 </label>
                         </td>
                         <td></td>
@@ -103,7 +108,9 @@
                     <tr>
                         <td class="col-md-6">
                             <label class=" control-label col-md-4"><strong>تفاصيل خاصة :</strong></label>
-                            <label  class="col-md-10" rows="4">{{ $order->details}}  </label>
+                            @if ( $order->details!=null)
+                            <label style="margin-right: 2.5cm; border-style: groove; " class="col-md-10" rows="4">{{ $order->details}}  </label>
+                            @endif
                         </td>
                         <td></td>
                     </tr>
@@ -146,34 +153,7 @@
                     </tr>
 
                </table>
-              <br><br> <br><br><br> <br><br><br><br><br><br>
-              <hr/>
-              <table>
-                  <tr class=" row">
-                      <h3 style="margin-right: 25px"> رقم الطلبية # {{ $order->id }} </h3>
-                      <td class="col-md-3">
-                        <label class=" control-label col-md-3"><strong>الإجمالي:</strong></label>
-                        <label  class="col-md-8">{{ $order->price}}  </label>
-                      </td>
-                      <td class="col-md-3">
-                        <label class=" control-label col-md-3"><strong>الدفعة: </strong></label>
-                        <label class="col-md-8">{{ $order->payment}}  </label>
-                      </td>
-                      <td class="col-md-3">
-                        <label class=" control-label col-md-3"><strong>متبقي:</strong></label>
-                        <label  class="col-md-8">{{ $order->remaining}}  </label>
-                      </td>
-                      <td class="col-md-2">
-                        <img align="left" style="height: 60px; width: 200px;" src="/metronic-rtl/assets/layouts/layout/img/logoo.png"  alt="" />
-                        <br><br> <br>
-                        <h5 align="left"   > يرجى الإحتفاظ بالوصل لحين استلام الطلبية</h5>
-                      </td>
-                  </tr>
-              </table>
-
-
-
-
+              <br>
             </div>
 </div>
             <button class="btn btn-danger  float-left mt-3 mr-2" id="print_Button" onclick="printDiv()"> <i

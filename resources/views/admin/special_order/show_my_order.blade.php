@@ -13,19 +13,19 @@
         <tr >
             <td  class="col-xs-6">
                 <label class=" control-label col-md-4"><strong>اسم الزبون :</strong></label>
-                <label  class=" col-md-8">{{ $order->name}}  </label>
+                <label  class=" col-md-8">{{ $order->customer->name}}  </label>
 
             </td>
             <td class="col-xs-6">
                 <label class=" control-label col-md-4"><strong>العنوان :</strong></label>
-                <label  class="col-md-8">{{ $order->address}}  </label>
+                <label  class="col-md-8">{{ $order->customer->address}}  </label>
 
         </td>
         </tr>
         <tr>
             <td class="col-md-6">
                 <label class="  control-label col-md-4"><strong>جوال :</strong></label>
-                <label class="col-md-8">{{ $order->mobile}}  </label>
+                <label class="col-md-8">{{ $order->customer->mobile}}  </label>
 
             </td>
             <td class="col-md-6">
@@ -66,9 +66,12 @@
             <td class="col-md-6">
                 <label class="control-label col-md-2"><strong>النوع :</strong></label>
                     <label class="col-md-12" >
-                        <label  class="col-md-4" ><input disabled {{ $order->classic?"checked":""}} name="classic" type="checkbox">   كلاسيك</label> &nbsp;&nbsp;&nbsp;
-                        <label  class="col-md-4"><input disabled  {{ $order->special?"checked":""}} name="special"  type="checkbox"> سبيشال </label> &nbsp;&nbsp;&nbsp;
-                        <label  class="col-md-0"><input disabled {{ $order->sugar?"checked":""}}   name="sugar"    type="checkbox"> سكر    </label> &nbsp;&nbsp;&nbsp;
+                        @foreach ($type as $t )
+                        <?php
+                        $checked =  $order->special_categories()->where("id",$t->id)->count();
+                        ?>
+                        <label class="control-label"><input {{$checked?'checked':''}} value="{{$t->id}}" name="type[]" type="checkbox">  {{ $t->name}}</label> &nbsp;&nbsp;&nbsp;
+                        @endforeach
                     </label>
             </td>
             <td></td>

@@ -1,14 +1,16 @@
 @extends("admin.master")
 
 @section("title")
-التصنفات
+الزبائن
 @endsection
 @section("subtitle")
-يمكنك اضافة حذف وتعديل التصنيفات
+يمكنك اضافة حذف وتعديل الزبائن
 @endsection
 
 
 @section("content")
+
+
 <form class="row">
     <div class="col-sm-3">
         <input autofocus   value="{{$q}}" type="text" class="form-control" name="q" placeholder="ادخل كلمة البحث" />
@@ -26,35 +28,41 @@
     <div class="col-sm-2">
     </div>
     <div class="col-sm-3">
-        <a class="btn btn-success pull-right" href="/admin/categories/create">
-            <i class="fa fa-plus"></i> اضافة تصنيف جديد</a>
+        <a class="btn btn-success pull-right" href="/admin/customers/create">
+            <i class="fa fa-plus"></i> اضافة زبون جديد</a>
     </div>
 </form>
 <br>
-@if($items->count()>0)
+@if($customers->count()>0)
 <table class="table table-striped table-bordered table-hover">
     <thead>
         <tr>
-            <th  width="30%">التصنيف</th>
+            <th>الزبائن</th>
+            <th width="20%">الجوال</th>
+            <th width="20%">العنوان</th>
             <th width="10%">الحالة</th>
-            <th width="5%"></th>
+            <th width="20%">محذوفة بواسطة</th>
+            <th width="10%"></th>
         </tr>
     </thead>
     <tbody>
-        @foreach($items as $a)
+        @foreach($customers as $a)
         <tr>
             <td>{{$a->name}}</td>
+            <td>{{$a->mobile}}</td>
+            <td>{{$a->address}}</td>
             <td><input type="checkbox" value="{{$a->id}}" class='cbStatus' {{$a->status?"checked":""}} /></td>
+            <td> {{$a->deleted_at}} _ {{$a->deleted_by}}</td>
             <td>
                 @if ($a->deleted_at==null)
-                <a href="/admin/categories/{{$a->id}}/edit" class="btn btn-xs btn-primary">
+                <a href="/admin/customers/{{$a->id}}/edit" class="btn btn-xs btn-primary">
                     <i class="glyphicon glyphicon-edit"></i>
                 </a>
 
-                <form  class="inline" action="{{ route('admin.categories.destroy', $a->id) }}" method="POST">
+                <form class="inline" action="{{ route('admin.customers.destroy', $a->id) }}" method="POST">
                     @csrf
                     @method('delete')
-                    <button  onclick="return confirm('هل انت متأكد من الاستمرار في العملية؟')" class="btn Confirm btn-xs btn-danger"><i class="glyphicon glyphicon-trash"></i></button>
+                    <button onclick="return confirm('هل انت متأكد من الاستمرار في العملية؟')" class="btn Confirm btn-xs btn-danger"><i class="glyphicon glyphicon-trash"></i></button>
                 </form>
                 @endif
             </td>
@@ -67,8 +75,6 @@
 <br>
 <div class="alert alert-warning"><b>نأسف</b>, لا يوجد بيانات لعرضها ...</div>
 @endif
-
-
 @endsection
 
 @section("js")
@@ -76,7 +82,8 @@
         $(function(){
             $(".cbStatus").click(function(){
                 var id = $(this).val();
-                $.get("/admin/categories/"+id+"/status");
+                //alert(id);
+                $.get("/admin/customers/"+id+"/status");
             });
         });
     </script>

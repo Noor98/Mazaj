@@ -18,7 +18,7 @@
 <div class=" main-content-body-invoice" id="print">
 
 
-    <div class="row">
+    <div  class="row">
         <div class="row">
             <h3 style="margin-right: 1cm">
             طلبية # {{ $order->id }}
@@ -27,12 +27,10 @@
                 <div class="col-md-12"><img align="left" style="height: 80px; width: 200px;" src="/metronic-rtl/assets/layouts/layout/img/logoo.png" /></div>
             </div>
         </div>
+        <div class="form-group">
+            <h1 style="text-align:center"> <strong> {{ $order->user->name}} </strong></h1>
+        </div>
         <div class="col-md-12 form-horizontal">
-            <div class="form-group">
-                <label for="name" class="col-sm-2 control-label">الاسم:  </label>
-                    <span class="col-sm-10 col-md-5" > <strong> {{ $order->user->name}} </strong></span>
-            </div>
-
             <div class="form-group">
                 <label for="name" class="col-sm-2 control-label">التاريخ:  </label>
                     <span class="col-sm-10 col-md-5"> <strong> {{ $order->order_date}} </strong></span>
@@ -40,7 +38,7 @@
 
             <div class="form-group">
                 <label for="name" class="col-sm-2 control-label">ملاحظات:  </label>
-                    <span class="col-sm-10 col-md-5"> <strong>
+                    <span style="border-style: groove;" class="col-sm-10 col-md-5"> <strong>
                         @if($order->description==null)
                         لا يوجد ملاحظات
                         @else
@@ -52,12 +50,20 @@
     </div>
 
     <hr>
-    <table class="table table-hover table-striped table-hover">
+    <?php 
+    $p=false;
+    foreach($order->details as $o)
+        if($o->item->price)
+            $p=true;
+    ?>
+    <table class="table table-hover table-bordered  table-striped table-hover">
         <thead>
             <tr>
                 <th></th>
                 <th>الصنف</th>
-                <th>سعر الصنف</th>
+                @if ($p)
+                <th>سعر الصنف</th> 
+                @endif
                 <th> الوحدة</th>
                 <th>الكمية</th>
                 <th>ملاحظات</th>
@@ -68,9 +74,11 @@
             @foreach($order->details as $o)
                 @if(auth()->user()->user_type=='admin')
                         <tr>
-                            <td></td>
+                            <td>{{$o->item->item_num}}</td>
                             <td>{{$o->item->name}}</td>
+                            @if ($p)
                             <td>{{$o->item->price}}</td>
+                            @endif
                             <td>{{$o->item->unit->name}}</td>
                             <td>{{$o->quantity}} </td>
                             <td width="30%">{{$o->item_description}} </td>
@@ -80,9 +88,11 @@
                     @foreach(auth()->user()->categories as $c)
                         @if($o->item->category_id==$c->id)
                             <tr>
-                                <td></td>
+                                <td>{{$o->item->item_num}}</td>
                                 <td>{{$o->item->name}}</td>
+                                @if ($p)
                                 <td>{{$o->item->price}}</td>
+                                @endif
                                 <td>{{$o->item->unit->name}}</td>
                                 <td>{{$o->quantity}} </td>
                                 <td width="30%">{{$o->item_description}} </td>

@@ -24,7 +24,6 @@ class SpecialRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required',
             'address'=> 'required',
             'mobile'=> 'required',
             'delivery_branch'=> 'required',
