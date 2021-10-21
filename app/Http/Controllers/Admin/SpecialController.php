@@ -77,7 +77,7 @@ class SpecialController extends Controller
             return view('admin.special_order.create',compact('type'));
         }
         else
-            return redirect()->route('admin.my_orders')->withSuccess(" غير مسموح إنشاء طلبية في هذا الوقت");
+            return redirect()->route('admin.my_orders')->withSuccess(" غير مسموح إنشاء طلبية في هذا الوقت: يمكنك الإضافة من الساعة 8 صباحا إالى الساعة 12 منتصف الليل");
     }
 
     /**

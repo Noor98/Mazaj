@@ -47,9 +47,10 @@ class ItemController extends Controller
             $items=$items->where("category_id","=",$category_id);
         if($unit_id!=NULL)
             $items=$items->where("unit_id","=",$unit_id);
-
-        //$items = $items->paginate(10)->appends(["q"=>$q,"status"=>$status,"category_id"=>$category_id,"unit_id"=>$unit_id]);
-        $categories=Category::all();
+        $categories= Category_User::join("categories","category_user.category_id","categories.id")
+                    ->where("user_id",auth()->user()->id)
+                    ->latest()
+                    ->get();
         $units=Unit::all();
         return view('admin.items.index',compact('items','q','status','category_id','unit_id','categories','units'));
     }
@@ -61,7 +62,10 @@ class ItemController extends Controller
      */
     public function create()
     {
-        $categories=Category::where("status","1")->get();
+        $categories= Category_User::join("categories","category_user.category_id","categories.id")
+                    ->where("user_id",auth()->user()->id)
+                    ->latest()
+                    ->get();
         $units=Unit::where("status","1")->get();
         return view('admin.items.create',compact('categories','units'));
     }
@@ -118,7 +122,10 @@ class ItemController extends Controller
     public function edit($id)
     {
         $item=Item::find($id);
-        $categories=Category::all();
+        $categories= Category_User::join("categories","category_user.category_id","categories.id")
+                    ->where("user_id",auth()->user()->id)
+                    ->latest()
+                    ->get();
         $units=Unit::all();
         if($item == NULL){
             return redirect("/admin/items")->withSuccess(" الرجاء التأكد من الرابط المطلوب");
@@ -217,7 +224,6 @@ class ItemController extends Controller
                         ->whereRaw("(name  like ? or id  like ?)", ["%$search%","%$search%"])
                         ->get();
                 }
-        //dd($items);
         return response()->json($items);
     }
 
